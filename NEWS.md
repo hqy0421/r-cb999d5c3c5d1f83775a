@@ -1,5 +1,19 @@
 # infer (development version)
 
+* Added an entity-level analysis workflow for exact, constraint-aware record
+  resolution. `resolve_entities()` partitions stable record ids into entities
+  that satisfy trusted must-link/cannot-link constraints while minimizing the
+  total pairwise merge/split integer penalty. The optimum is found exactly by
+  branch-and-bound (no threshold, connected-components, or greedy shortcut),
+  is independent of response values, and exposes the original id mapping,
+  membership, and a per-pair cost explanation via `entity_members()`,
+  `pair_costs()`, and `total_penalty()`. `aggregate_entities()` applies
+  pre-declared column rules to produce one type-checked row per entity, and
+  `fit_entity_analysis()` runs a real `specify()`/`fit()` on that population,
+  reporting the entities included in and excluded from the model. Inconsistent
+  hard constraints, aggregation failures, and fitting failures all error
+  rather than publishing a new analysis population.
+
 # infer 1.1.0
 
 * Fixed bug where adding `shade_confidence_interval(NULL)` or `shade_p_value(NULL)` 
